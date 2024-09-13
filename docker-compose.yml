@@ -1,0 +1,41 @@
+version: '3'
+services:
+  rproxy:
+    image: edugarrick/nginx-insecure
+    volumes:
+    - ./templates:/etc/nginx/templates
+    ports:
+    - "8080:80"
+    environment:
+    - NGINX_HOST=foobar.com
+    - NGINX_PORT=80
+    networks:
+    - front
+  target:
+    image: edugarrick/vul_django
+    ports:
+    - "8070:8000"
+    depends_on:
+    - db
+    networks:
+    - front
+    - back
+  db:
+    image: postgres:13-alpine
+    environment:
+    - POSTGRES_PASSWORD=postgres
+    - POSTGRES_DB=CVE_2022_34265
+    networks:
+    - back
+
+networks:
+  front:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 192.168.1.0/24 
+  back:
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 192.168.2.0/24 
