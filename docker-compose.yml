@@ -35,7 +35,6 @@ networks:
       - subnet: 192.168.1.0/24 
   back:
     driver: bridge
-    internal: True
     ipam:
       config:
       - subnet: 192.168.2.0/24 
